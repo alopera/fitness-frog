@@ -45,11 +45,13 @@ namespace Treehouse.FitnessFrog.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(DateTime? date,
-            int? activityId, double? duration,
-            Entry.IntensityLevel? intensity,
-            bool? exclude, string notes)
+        public ActionResult Add(Entry entry)
         {
+            if (ModelState.IsValid)
+            {
+                _entriesRepository.AddEntry(entry);
+
+            }
             return View();
         }
 
