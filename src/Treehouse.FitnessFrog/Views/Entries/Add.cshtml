@@ -7,6 +7,10 @@
 
 <h2>@ViewBag.Title</h2>
 
+@Html.ValidationSummary("The following errors were found:", new { @class = "alert alert-danger" })
+ 
+
+
 @using (Html.BeginForm())
 {
     <div class="row">
@@ -20,7 +24,10 @@
 
             <div class="form-group">
                 @Html.LabelFor(m => m.ActivityId, new { @class = "control-label" })
-                @Html.DropDownListFor(m => m.ActivityId, ViewBag.ActivitiesSelectListItems as SelectList, "Select an Activity", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.ActivityId,
+                                    ViewBag.ActivitiesSelectListItems as SelectList, "Select an Activity", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ActivityId)
+
             </div>
 
             <div class="form-group">
