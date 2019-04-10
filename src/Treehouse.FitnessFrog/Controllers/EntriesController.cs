@@ -55,10 +55,7 @@ namespace Treehouse.FitnessFrog.Controllers
         [HttpPost]
         public ActionResult Add(Entry entry)
         {
-            if (ModelState.IsValidField("Duration") && entry.Duration <=0)
-            {
-                ModelState.AddModelError("Duration", "El campo duración debe ser mayor que cero.");
-            }
+            ValidateEntry(entry);
 
             if (ModelState.IsValid)
             {
@@ -67,10 +64,16 @@ namespace Treehouse.FitnessFrog.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ActivitiesSelectListItems = new SelectList(
-                Data.Data.Activities, "Id", "Name");
-
+            setupActivitiesSelectList();
             return View(entry);
+        }
+
+        private void ValidateEntry(Entry entry)
+        {
+            if (ModelState.IsValidField("Duration") && entry.Duration <= 0)
+            {
+                ModelState.AddModelError("Duration", "El campo duración debe ser mayor que cero.");
+            }
         }
 
         public ActionResult Edit(int? id)
@@ -79,8 +82,29 @@ namespace Treehouse.FitnessFrog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
+            var entry = _entriesRepository.GetEntry((int)id);
+            if (entry == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound),
+            }
+            setupActivitiesSelectList();
+            return View(entry);
+        }
 
-            return View();
+        [HttpPost]
+        public ActionResult Edit(Entry entry)
+        {
+            ValidateEntry(entry);
+
+            if (ModelState.IsValid)
+            {
+                _entriesRepository.UpdateEntry(entry);
+                return RedirectToAction("Index");
+            }
+
+            setupActivitiesSelectList();
+            return View(entry);
         }
 
         public ActionResult Delete(int? id)
@@ -91,6 +115,12 @@ namespace Treehouse.FitnessFrog.Controllers
             }
 
             return View();
+        }
+
+        private void setupActivitiesSelectList()
+        {
+            ViewBag.ActivitiesSelectListItems = new SelectList(
+                Data.Data.Activities, "Id", "Name");
         }
     }
 }
