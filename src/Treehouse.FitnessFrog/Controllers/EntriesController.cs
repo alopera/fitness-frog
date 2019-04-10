@@ -86,7 +86,7 @@ namespace Treehouse.FitnessFrog.Controllers
             var entry = _entriesRepository.GetEntry((int)id);
             if (entry == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound),
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
             setupActivitiesSelectList();
             return View(entry);
