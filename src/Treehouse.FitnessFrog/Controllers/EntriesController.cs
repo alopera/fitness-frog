@@ -113,7 +113,6 @@ namespace Treehouse.FitnessFrog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             var entryToDelete =_entriesRepository.GetEntry((int)id);
             if (entryToDelete == null)
             {
